@@ -1,3 +1,7 @@
+export const dynamic = 'force-static';
+// 或者如果您需要定期重新驗證數據
+// export const revalidate = 3600; // 每小時重新驗證一次
+
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
