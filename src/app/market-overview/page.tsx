@@ -3,6 +3,21 @@
 import React, { useState, useEffect } from 'react';
 import GoldPriceChart from '@/components/charts/GoldPriceChart';
 
+// 定義數據結構接口
+interface GoldPriceData {
+  gold_prices?: {
+    GLD?: {
+      price: number;
+      change: number;
+      change_percent: number;
+      update_time: string;
+    }
+  };
+  chart_data?: {
+    short_term: any[];
+  };
+}
+
 export default function MarketOverview() {
   // 狀態管理
   const [goldData, setGoldData] = useState({
@@ -23,7 +38,7 @@ export default function MarketOverview() {
           throw new Error('無法獲取黃金價格數據');
         }
         
-        const data = await response.json();
+        const data = await response.json() as GoldPriceData;
         
         // 更新黃金價格數據
         if (data.gold_prices && data.gold_prices.GLD) {
