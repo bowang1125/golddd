@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import GoldPriceChart from '@/components/charts/GoldPriceChart';
 
+// 從GoldPriceChart組件導入ChartDataItem接口
+import type { ChartDataItem } from '@/components/charts/GoldPriceChart';
+
 // 定義數據結構接口
 interface GoldPriceData {
   gold_prices?: {
@@ -14,7 +17,7 @@ interface GoldPriceData {
     }
   };
   chart_data?: {
-    short_term: any[];
+    short_term: ChartDataItem[];
   };
 }
 
@@ -26,7 +29,7 @@ export default function MarketOverview() {
     changePercent: 0,
     updateTime: ''
   });
-  const [chartData, setChartData] = useState([]);
+  const [chartData, setChartData] = useState<ChartDataItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   // 獲取黃金價格數據
@@ -74,7 +77,7 @@ export default function MarketOverview() {
   }, []);
 
   // 模擬黃金長期價格數據
-  const goldPriceHistorical = [
+  const goldPriceHistorical: ChartDataItem[] = [
     { name: '2020', price: 1567.00 },
     { name: '2021', price: 1830.00 },
     { name: '2022', price: 1975.00 },
