@@ -1,40 +1,78 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import GoldPriceChart from '@/components/charts/GoldPriceChart';
 
-// 模擬2025年黃金價格預測數據
-const goldPricePrediction2025 = [
-  { name: '1月', price: 2862.00 },
-  { name: '2月', price: 3040.00 },
-  { name: '3月', price: 3040.00 },
-  { name: '4月', price: 2990.00, prediction: 2990.00 },
-  { name: '5月', price: null, prediction: 2925.00 },
-  { name: '6月', price: null, prediction: 2921.00 },
-  { name: '7月', price: null, prediction: 3000.00 },
-  { name: '8月', price: null, prediction: 3081.00 },
-  { name: '9月', price: null, prediction: 3140.00 },
-  { name: '10月', price: null, prediction: 3200.00 },
-  { name: '11月', price: null, prediction: 3260.00 },
-  { name: '12月', price: null, prediction: 3400.00 },
-];
-
-// 模擬黃金長期價格數據
-const goldPriceHistorical = [
-  { name: '2020', price: 1567.00 },
-  { name: '2021', price: 1830.00 },
-  { name: '2022', price: 1975.00 },
-  { name: '2023', price: 2062.00 },
-  { name: '2024', price: 2600.00 },
-  { name: '2025', price: null, prediction: 3400.00 },
-  { name: '2026', price: null, prediction: 4000.00 },
-  { name: '2027', price: null, prediction: 4300.00 },
-  { name: '2028', price: null, prediction: 4600.00 },
-  { name: '2029', price: null, prediction: 4800.00 },
-  { name: '2030', price: null, prediction: 5085.00 },
-];
-
 export default function MarketOverview() {
+  // 狀態管理
+  const [goldData, setGoldData] = useState({
+    price: 0,
+    change: 0,
+    changePercent: 0,
+    updateTime: ''
+  });
+  const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // 獲取黃金價格數據
+  useEffect(() => {
+    const fetchGoldData = async () => {
+      try {
+        const response = await fetch('/api/gold-price');
+        if (!response.ok) {
+          throw new Error('無法獲取黃金價格數據');
+        }
+        
+        const data = await response.json();
+        
+        // 更新黃金價格數據
+        if (data.gold_prices && data.gold_prices.GLD) {
+          const gldData = data.gold_prices.GLD;
+          setGoldData({
+            price: gldData.price.toFixed(2),
+            change: gldData.change.toFixed(2),
+            changePercent: gldData.change_percent.toFixed(2),
+            updateTime: gldData.update_time
+          });
+        }
+        
+        // 更新圖表數據
+        if (data.chart_data && data.chart_data.short_term) {
+          setChartData(data.chart_data.short_term);
+        }
+        
+        setLoading(false);
+      } catch (error) {
+        console.error('獲取黃金價格數據時出錯:', error);
+        setLoading(false);
+      }
+    };
+
+    // 首次加載時獲取數據
+    fetchGoldData();
+
+    // 設置每分鐘更新一次
+    const intervalId = setInterval(fetchGoldData, 60000);
+
+    // 清理函數
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // 模擬黃金長期價格數據
+  const goldPriceHistorical = [
+    { name: '2020', price: 1567.00 },
+    { name: '2021', price: 1830.00 },
+    { name: '2022', price: 1975.00 },
+    { name: '2023', price: 2062.00 },
+    { name: '2024', price: 2600.00 },
+    { name: '2025', price: null, prediction: 3400.00 },
+    { name: '2026', price: null, prediction: 4000.00 },
+    { name: '2027', price: null, prediction: 4300.00 },
+    { name: '2028', price: null, prediction: 4600.00 },
+    { name: '2029', price: null, prediction: 4800.00 },
+    { name: '2030', price: null, prediction: 5085.00 },
+  ];
+
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-4xl mx-auto">
@@ -48,8 +86,10 @@ export default function MarketOverview() {
             <div className="flex flex-col md:flex-row justify-between items-center mb-6">
               <div className="mb-4 md:mb-0">
                 <p className="text-gray-400 text-sm">當前黃金價格</p>
-                <p className="text-4xl font-bold text-yellow-500">$3,016.86</p>
-                <p className="text-green-500 text-sm">+$12.40 (0.41%)</p>
+                <p className="text-4xl font-bold text-yellow-500">${loading ? '載入中...' : goldData.price}</p>
+                <p className={`text-sm ${parseFloat(goldData.change) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  {loading ? '載入中...' : `${parseFloat(goldData.change) >= 0 ? '+' : ''}$${goldData.change} (${goldData.changePercent}%)`}
+                </p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -66,7 +106,7 @@ export default function MarketOverview() {
             </div>
             <div className="h-1 w-full bg-gray-700 mb-6"></div>
             <p className="text-gray-300">
-              截至2025年3月24日，黃金的交易價格為 $3,016.86 美元/盎司。黃金價格於2025年3月20日創下 $3,057.4 的歷史新高，而歷史低點則是在1999年8月25日觸及的 $252.55。
+              截至{loading ? '載入中...' : goldData.updateTime}，黃金的交易價格為 ${loading ? '載入中...' : goldData.price} 美元/盎司。黃金價格於2025年3月20日創下 $3,057.4 的歷史新高，而歷史低點則是在1999年8月25日觸及的 $252.55。
             </p>
           </div>
         </section>
@@ -74,15 +114,21 @@ export default function MarketOverview() {
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-4 text-yellow-500">價格趨勢與預測</h2>
           
-          <h3 className="text-xl font-semibold mb-3 text-white">短期預測（2025年）</h3>
+          <h3 className="text-xl font-semibold mb-3 text-white">短期預測（1個月）</h3>
           <p className="text-gray-300 mb-4">
-            根據LiteFinance的分析，2025年黃金價格預計將持續上漲趨勢。分析師預測金價將在以下範圍波動：
+            根據最新市場數據分析，近期黃金價格呈現波動趨勢。下圖顯示了過去一個月的實際價格走勢以及未來幾天的預測。
           </p>
           
-          <GoldPriceChart data={goldPricePrediction2025} title="2025年黃金價格預測" />
+          {loading ? (
+            <div className="h-80 mb-8 bg-gray-800 rounded-lg p-4 flex items-center justify-center">
+              <div className="animate-pulse text-yellow-500">載入圖表數據中...</div>
+            </div>
+          ) : (
+            <GoldPriceChart data={chartData} title="黃金短期趨勢（1個月）" />
+          )}
           
           <p className="text-gray-300 mb-6">
-            根據Long Forecast的預測，到2025年底，黃金價格可能達到4,042美元。
+            根據技術分析和市場情緒指標，短期內黃金價格可能繼續保持波動，但整體維持上升趨勢。
           </p>
           
           <h3 className="text-xl font-semibold mb-3 text-white">中長期預測（2026-2030年）</h3>
@@ -235,6 +281,7 @@ export default function MarketOverview() {
               <li>Long Forecast - 黃金價格預測</li>
               <li>Gov Capital - 黃金價格預測</li>
               <li>Coin Price Forecast - 黃金長期價格預測</li>
+              <li>實時數據 - 每分鐘更新的黃金市場價格</li>
             </ul>
           </div>
         </section>
