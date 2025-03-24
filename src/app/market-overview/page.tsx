@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import GoldPriceChart from '@/components/charts/GoldPriceChart';
-
-// 從GoldPriceChart組件導入ChartDataItem接口
 import type { ChartDataItem } from '@/components/charts/GoldPriceChart';
 
 // 定義數據結構接口
@@ -21,12 +19,20 @@ interface GoldPriceData {
   };
 }
 
+// 定義goldData的接口，使用字符串類型
+interface GoldDataState {
+  price: string;
+  change: string;
+  changePercent: string;
+  updateTime: string;
+}
+
 export default function MarketOverview() {
-  // 狀態管理
-  const [goldData, setGoldData] = useState({
-    price: 0,
-    change: 0,
-    changePercent: 0,
+  // 狀態管理，修改類型定義為字符串
+  const [goldData, setGoldData] = useState<GoldDataState>({
+    price: '0',
+    change: '0',
+    changePercent: '0',
     updateTime: ''
   });
   const [chartData, setChartData] = useState<ChartDataItem[]>([]);
