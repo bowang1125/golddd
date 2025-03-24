@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-interface ChartDataItem {
+// 導出接口以便其他文件使用
+export interface ChartDataItem {
   name: string;
   price?: number | null;
   prediction?: number | null;
