@@ -255,7 +255,7 @@ export default function MarketSentiment() {
               <li>正面情緒佔比: 68% (上升)</li>
               <li>負面情緒佔比: 18% (下降)</li>
               <li>中性情緒佔比: 14% (穩定)</li>
-              <li>熱門關鍵詞: "黃金牛市", "通膨對沖", "央行購金", "新高"</li>
+              <li>熱門關鍵詞: &quot;黃金牛市&quot;, &quot;通膨對沖&quot;, &quot;央行購金&quot;, &quot;新高&quot;</li>
             </ul>
           </div>
         </section>
@@ -267,21 +267,21 @@ export default function MarketSentiment() {
             <div className="space-y-6">
               <div className="border-l-4 border-yellow-500 pl-4">
                 <p className="text-gray-300 italic">
-                  "黃金的上漲勢頭仍然強勁，但投資者應該警惕短期內可能出現的回調。我們預計金價將在2025年底前達到3,200美元，但路徑可能不會一帆風順。"
+                  &quot;黃金的上漲勢頭仍然強勁，但投資者應該警惕短期內可能出現的回調。我們預計金價將在2025年底前達到3,200美元，但路徑可能不會一帆風順。&quot;
                 </p>
                 <p className="text-yellow-500 mt-2">— Joni Teves, 瑞銀貴金屬策略師</p>
               </div>
               
               <div className="border-l-4 border-yellow-500 pl-4">
                 <p className="text-gray-300 italic">
-                  "黃金價格已經漲得過快，可能需要一段時間的整固。我們預計金價在今年內會有所回落，但長期趨勢仍然向上。"
+                  &quot;黃金價格已經漲得過快，可能需要一段時間的整固。我們預計金價在今年內會有所回落，但長期趨勢仍然向上。&quot;
                 </p>
                 <p className="text-yellow-500 mt-2">— Carsten Fritsch, 德國商業銀行分析師</p>
               </div>
               
               <div className="border-l-4 border-yellow-500 pl-4">
                 <p className="text-gray-300 italic">
-                  "央行購金仍是支撐金價的關鍵因素。我們預計這一趨勢將持續，尤其是在地緣政治緊張和去美元化背景下。"
+                  &quot;央行購金仍是支撐金價的關鍵因素。我們預計這一趨勢將持續，尤其是在地緣政治緊張和去美元化背景下。&quot;
                 </p>
                 <p className="text-yellow-500 mt-2">— Bernard Dahdah, 法國外貿銀行貴金屬分析師</p>
               </div>
